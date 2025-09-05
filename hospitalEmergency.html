@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Emergency Response</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <!-- Emergency Info and Services Section -->
+  <div class="header">
+    <div class="emergency">Emergency No: <strong>112</strong></div>
+    <div class="services">Services: Ambulance, ICU, Blood Bank, Pharmacy</div>
+  </div>
+
+  <!-- QR Code Generation Section -->
+  <div class="container">
+    <h2>Generate Medical QR Code</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+
+    <!-- Dropdown for selecting a single blood group -->
+    <label for="blood">Blood Group:</label>
+    <select id="blood" required>
+      <option value="">Select Blood Group</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+    </select>
+
+    <!-- Medicine selection buttons -->
+    <label for="medicines">Medicines:</label>
+    <div id="medicineButtons">
+      <button type="button" class="medicine-btn" data-medicine="Paracetamol">Paracetamol</button>
+      <button type="button" class="medicine-btn" data-medicine="Ibuprofen">Ibuprofen</button>
+      <button type="button" class="medicine-btn" data-medicine="Amoxicillin">Amoxicillin</button>
+      <button type="button" class="medicine-btn" data-medicine="Ciprofloxacin">Ciprofloxacin</button>
+      <button type="button" class="medicine-btn" data-medicine="Metformin">Metformin</button>
+      <button type="button" class="medicine-btn" data-medicine="Aspirin">Aspirin</button>
+      <button type="button" class="medicine-btn" data-medicine="Omeprazole">Omeprazole</button>
+      <button type="button" class="medicine-btn" data-medicine="Atorvastatin">Atorvastatin</button>
+      <button type="button" class="medicine-btn" data-medicine="Losartan">Losartan</button>
+      <button type="button" class="medicine-btn" data-medicine="Clopidogrel">Clopidogrel</button>
+      <button type="button" class="medicine-btn" data-medicine="Azithromycin">Azithromycin</button>
+      <button type="button" class="medicine-btn" data-medicine="Doxycycline">Doxycycline</button>
+      <button type="button" class="medicine-btn" data-medicine="Levothyroxine">Levothyroxine</button>
+      <button type="button" class="medicine-btn" data-medicine="Pantoprazole">Pantoprazole</button>
+      <button type="button" class="medicine-btn" data-medicine="Cetirizine">Cetirizine</button>
+      <button type="button" class="medicine-btn" data-medicine="Ranitidine">Ranitidine</button>
+      <button type="button" class="medicine-btn" data-medicine="Hydroxychloroquine">Hydroxychloroquine</button>
+      <button type="button" class="medicine-btn" data-medicine="Prednisolone">Prednisolone</button>
+      <button type="button" class="medicine-btn" data-medicine="Furosemide">Furosemide</button>
+      <button type="button" class="medicine-btn" data-medicine="Salbutamol">Salbutamol</button>
+    </div>
+
+    <input type="text" id="contact" placeholder="Contact Number" required>
+    <button onclick="generateQR()">Generate QR Code</button>
+    <div id="qrcode"></div>
+  </div>
+
+  <!-- Hospital Manager Section -->
+  <div class="container">
+    <h2>Hospital Manager</h2>
+    <form id="hospitalForm">
+      <label for="hospitalName">Hospital Name:</label>
+      <select id="hospitalName" required>
+        <option value="">Select Hospital</option>
+        <!-- Mumbai Hospitals -->
+        <option value="Breach Candy Hospital, Mumbai">Breach Candy Hospital, Mumbai</option>
+        <option value="Lilavati Hospital, Mumbai">Lilavati Hospital, Mumbai</option>
+        <option value="Kokilaben Dhirubhai Ambani Hospital, Mumbai">Kokilaben Dhirubhai Ambani Hospital, Mumbai</option>
+        <option value="Nanavati Hospital, Mumbai">Nanavati Hospital, Mumbai</option>
+        <option value="Fortis Hospital, Mumbai">Fortis Hospital, Mumbai</option>
+        <option value="Global Hospital, Mumbai">Global Hospital, Mumbai</option>
+        <option value="Hiranandani Hospital, Mumbai">Hiranandani Hospital, Mumbai</option>
+        <option value="Saifee Hospital, Mumbai">Saifee Hospital, Mumbai</option>
+        <option value="Holy Family Hospital, Mumbai">Holy Family Hospital, Mumbai</option>
+        <option value="Bombay Hospital, Mumbai">Bombay Hospital, Mumbai</option>
+      </select>
+
+      <!-- Blood group selection buttons -->
+      <label for="bloodAvailable">Blood Available:</label>
+      <div id="bloodGroupButtons">
+        <button type="button" class="blood-btn" data-blood="A+">A+</button>
+        <button type="button" class="blood-btn" data-blood="A-">A-</button>
+        <button type="button" class="blood-btn" data-blood="B+">B+</button>
+        <button type="button" class="blood-btn" data-blood="B-">B-</button>
+        <button type="button" class="blood-btn" data-blood="O+">O+</button>
+        <button type="button" class="blood-btn" data-blood="O-">O-</button>
+        <button type="button" class="blood-btn" data-blood="AB+">AB+</button>
+        <button type="button" class="blood-btn" data-blood="AB-">AB-</button>
+      </div>
+
+      <!-- Medicine selection buttons -->
+      <label for="hospitalMedicines">Medicines:</label>
+      <div id="hospitalMedicineButtons">
+        <button type="button" class="medicine-btn" data-medicine="Paracetamol">Paracetamol</button>
+        <button type="button" class="medicine-btn" data-medicine="Ibuprofen">Ibuprofen</button>
+        <button type="button" class="medicine-btn" data-medicine="Amoxicillin">Amoxicillin</button>
+        <button type="button" class="medicine-btn" data-medicine="Ciprofloxacin">Ciprofloxacin</button>
+        <button type="button" class="medicine-btn" data-medicine="Metformin">Metformin</button>
+        <button type="button" class="medicine-btn" data-medicine="Aspirin">Aspirin</button>
+        <button type="button" class="medicine-btn" data-medicine="Omeprazole">Omeprazole</button>
+        <button type="button" class="medicine-btn" data-medicine="Atorvastatin">Atorvastatin</button>
+        <button type="button" class="medicine-btn" data-medicine="Losartan">Losartan</button>
+        <button type="button" class="medicine-btn" data-medicine="Clopidogrel">Clopidogrel</button>
+      </div>
+
+      <input type="number" id="ventilators" placeholder="Number of Ventilators" required />
+      <button type="submit">Add Hospital</button>
+    </form>
+  </div>
+
+  <!-- Location Button -->
+  <div class="container">
+    <h2>Select Location</h2>
+    <select id="locationSelector">
+      <option value="all">All Locations</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Pune">Pune</option>
+      <option value="Nagpur">Nagpur</option>
+      <option value="Nashik">Nashik</option>
+      <option value="Aurangabad">Aurangabad</option>
+      <option value="Solapur">Solapur</option>
+      <option value="Kolhapur">Kolhapur</option>
+    </select>
+    <button onclick="filterHospitals()">Filter Hospitals</button>
+  </div>
+
+  <!-- QR Code Scanner Section -->
+  <div class="container">
+    <h2>Scan QR Code</h2>
+    <button onclick="startScan()">Scan QR Code</button>
+    <video id="video" style="width:100%;display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <div id="scanResult"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+  <script>
+    // Function to toggle selection for blood group and medicine buttons
+    document.querySelectorAll('.blood-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('selected');
+      });
+    });
+
+    document.querySelectorAll('.medicine-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('selected');
+      });
+    });
+
+    function filterHospitals() {
+      const location = document.getElementById('locationSelector').value;
+      alert(`Filtering hospitals for location: ${location}`);
+    }
+
+    function generateQR() {
+      const name = document.getElementById('name').value;
+      const blood = document.getElementById('blood').value;
+      const medicines = Array.from(document.querySelectorAll('.medicine-btn.selected')).map(btn =>
+        btn.getAttribute('data-medicine')
+      );
+      const contact = document.getElementById('contact').value;
+
+      if (!name || !blood || !contact) {
+        alert('Please fill in all required fields!');
+        return;
+      }
+
+      const qrData = JSON.stringify({ name, blood, medicines, contact });
+      document.getElementById('qrcode').innerHTML = '';
+      new QRCode(document.getElementById('qrcode'), qrData);
+
+      alert('QR Code generated successfully!');
+    }
+  </script>
+
+  <style>
+    .blood-btn, .medicine-btn {
+      margin: 5px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      color: black;
+      cursor: pointer;
+    }
+
+    .blood-btn.selected, .medicine-btn.selected {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    #scanResult {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</body>
+</html>

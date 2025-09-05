@@ -1,0 +1,3011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Emergency System</title>
+    <style>
+        :root {
+            --bg-color: rgba(255, 255, 255, 0.9);
+            --text-color: #000000;
+            --card-bg: #ffffff;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --section-bg: #ffffff;
+            --input-bg: #ffffff;
+            --select-bg: #ffffff;
+            --label-color: #000000;
+            --input-text: #000000;
+            --header-text: #000000;
+            --section-header-text: #000000;
+            --section-content-text: #000000;
+            --tab-text: #000000;
+            --tab-bg: #ffffff;
+            --tab-active-bg: #f0f0f0;
+            --tab-hover-bg: #e0e0e0;
+            --table-bg: #ffffff;
+            --table-header-bg: #f0f0f0;
+            --table-border: rgba(0, 0, 0, 0.1);
+            --table-text: #000000;
+            --table-header-text: #000000;
+            --placeholder-text: rgba(0, 0, 0, 0.5);
+            --success-bg: rgba(40, 167, 69, 0.1);
+            --success-text: #28a745;
+            --error-bg: rgba(220, 53, 69, 0.1);
+            --error-text: #dc3545;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: rgba(0, 0, 0, 0.8);
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.7);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --section-bg: rgba(0, 0, 0, 0.7);
+            --input-bg: rgba(0, 0, 0, 0.7);
+            --select-bg: rgba(0, 0, 0, 0.7);
+            --label-color: #ffffff;
+            --input-text: #ffffff;
+            --header-text: #ffffff;
+            --section-header-text: #ffffff;
+            --section-content-text: #ffffff;
+            --tab-text: #ffffff;
+            --tab-bg: rgba(0, 0, 0, 0.7);
+            --tab-active-bg: rgba(255, 255, 255, 0.1);
+            --tab-hover-bg: rgba(255, 255, 255, 0.05);
+            --table-bg: rgba(0, 0, 0, 0.7);
+            --table-header-bg: rgba(255, 255, 255, 0.1);
+            --table-border: rgba(255, 255, 255, 0.2);
+            --table-text: #ffffff;
+            --table-header-text: #ffffff;
+            --placeholder-text: rgba(255, 255, 255, 0.5);
+            --success-bg: rgba(40, 167, 69, 0.2);
+            --success-text: #28a745;
+            --error-bg: rgba(220, 53, 69, 0.2);
+            --error-text: #dc3545;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('cc.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.05);
+            z-index: -1;
+        }
+
+        body.scan-active {
+            background-image: url('AB.jpg');
+        }
+
+        body.add-active {
+            background-image: url('AB.jpg');
+        }
+
+        body.scan-active::before,
+        body.add-active::before {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 120px;
+            height: 80px;
+            border-radius: 40px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 3px solid #fff;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header-content {
+            text-align: center;
+            flex-grow: 1;
+            margin: 0;
+            padding: 0 20px;
+        }
+
+        .header-content h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 2.2em;
+            color: var(--header-text);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-content p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            color: var(--header-text);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .theme-language-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        .theme-selector select {
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--select-bg);
+            color: var(--input-text);
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-selector select:focus {
+            outline: none;
+            border-color: var(--border-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .language-selector label {
+            color: var(--label-color);
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+
+        .scan-section {
+            background-image: url('AB.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .scan-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .scan-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            max-height: 400px;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .scan-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background-color: rgba(0, 0, 139, 0.9);
+            color: white;
+            border: 2px solid rgba(0, 0, 139, 1);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .scan-button:hover {
+            background-color: rgba(0, 0, 139, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transform: scale(1.05);
+        }
+
+        #scanResult {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(248, 249, 250, 0.9);
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .hospital-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hospital-card h3 {
+            color: var(--section-header-text);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .hospital-card p {
+            color: var(--section-content-text);
+            margin: 8px 0;
+        }
+
+        .hospital-card .hospital-info {
+            color: var(--section-content-text);
+        }
+
+        .hospital-card .hospital-info strong {
+            color: var(--section-header-text);
+        }
+
+        .hospital-card .hospital-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .hospital-card .hospital-actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            color: var(--section-content-text);
+        }
+
+        .hospital-card .hospital-actions button:hover {
+            opacity: 0.9;
+        }
+
+        .hospital-card .hospital-actions .directions-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .hospital-card .hospital-actions .hospital-list-btn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .medicine-btn {
+            background-color: rgba(39, 174, 96, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border: 2px solid rgba(39, 174, 96, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .medicine-btn:hover {
+            background-color: rgba(27, 120, 66, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .medicines-list {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .medicines-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .medicines-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .medicines-list li.selected-medicine {
+            background-color: #e8f5e9;
+            border-color: #2e7d32;
+        }
+
+        .select-btn {
+            padding: 5px 10px;
+            background-color: rgba(0, 86, 179, 0.9);
+            color: white;
+            border: 2px solid rgba(0, 86, 179, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .select-btn:hover {
+            background-color: rgba(0, 60, 125, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .selected-medicine .select-btn {
+            background-color: #28a745;
+        }
+
+        .save-selected-btn {
+            background-color: rgba(33, 136, 56, 0.9);
+            margin-top: 10px;
+            border: 2px solid rgba(33, 136, 56, 1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .save-selected-btn:disabled {
+            background-color: rgba(204, 204, 204, 0.5);
+            cursor: not-allowed;
+        }
+
+        #hospitalList {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #hospitalList h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        #hospitalListBottom {
+            margin-top: 30px;
+        }
+
+        .form-section {
+            background-color: var(--section-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(8px);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--label-color);
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: var(--placeholder-text);
+        }
+
+        .generate-btn {
+            background-color: rgba(33, 136, 56, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border: 2px solid rgba(33, 136, 56, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .generate-btn:hover {
+            background-color: rgba(27, 120, 66, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .qr-display {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            backdrop-filter: blur(8px);
+        }
+
+        .qr-display img {
+            max-width: 200px;
+            margin: 10px auto;
+        }
+
+        .sections-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section {
+            display: none;
+            padding: 20px;
+            background-color: var(--section-bg);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(8px);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 0;
+            padding: 15px 20px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--section-header-text);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .section-content {
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            padding: 20px;
+            color: var(--section-content-text);
+        }
+
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: var(--tab-bg);
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab.active {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+
+        .medicine-select {
+            height: 200px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+        }
+
+        .selected-medicines {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .selected-medicine-tag {
+            display: inline-block;
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            margin: 4px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .selected-medicine-tag button {
+            background: none;
+            border: none;
+            color: #1976d2;
+            margin-left: 4px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .save-btn {
+            background-color: rgba(39, 174, 96, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border: 2px solid rgba(39, 174, 96, 1);
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .save-btn:hover {
+            background-color: rgba(27, 120, 66, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .saved-medicines {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .saved-medicines h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .saved-medicine-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+        .remove-medicine {
+            background-color: rgba(200, 35, 51, 0.9);
+            color: white;
+            border: 2px solid rgba(200, 35, 51, 1);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .remove-medicine:hover {
+            background-color: rgba(155, 27, 40, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .success-message {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .success-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success-content h3 {
+            margin: 0;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .success-content p {
+            margin: 0;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .qr-data-display {
+            background-color: var(--section-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(8px);
+        }
+
+        .qr-data-display h4 {
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .qr-data-content {
+            display: grid;
+            gap: 10px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .data-value {
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        #medicines, #bloodGroups {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            height: 120px;
+        }
+        
+        #ventilators {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        
+        small {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            font-size: 12px;
+        }
+
+        .checkbox-group {
+            background-color: var(--section-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+
+        .checkbox-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .checkbox-label:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .location-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .location-controls .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .city-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .location-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: auto;
+            font-size: 14px;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .location-btn:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .location-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .location-btn .spinner {
+            display: none;
+            margin-right: 8px;
+        }
+
+        .location-btn.loading .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <!-- Add this in the head section, after the existing scripts -->
+    </style>
+    <!-- Add this in the head section, after the existing scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/openai@4.0.0/dist/openai.min.js"></script>
+    <!-- Replace the OpenAI script with Google's Gemini AI script -->
+    <script src="https://generativelanguage.googleapis.com/v1beta/models?key=AIzaSyDhNkCUsbIu-FRr_gLYfpuICgZZPZuEqys"></script>
+    <script src="https://ai.google.dev/api/js/generativelanguage"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="cc.jpg" alt="Hospital Emergency System Logo" class="logo">
+            <div class="header-content">
+                <h1 data-translate="title">Hospital Emergency System</h1>
+                <p data-translate="subtitle">Generate QR code or scan to find nearby hospitals with required medical supplies</p>
+            </div>
+            <div class="theme-language-container">
+                <div class="theme-selector">
+                    <label for="theme">Theme:</label>
+                    <select id="theme" onchange="changeTheme(this.value)">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+                <div class="language-selector">
+                    <label for="language">Language:</label>
+                    <select id="language" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ka">ಕನ್ನಡ</option>
+                        <option value="ml">മലയാളം</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Replace the header-controls div with this simplified version -->
+            <div class="header-controls">
+                <button id="aiChatBtn" class="ai-chat-btn" type="button">
+                    <i class="fas fa-robot"></i> AI Chat
+                </button>
+            </div>
+            <!-- Add this in the header section -->
+            <div class="header-controls">
+                <button id="geminiBotBtn" class="gemini-bot-btn" type="button" onclick="openGeminiPrompt()">
+                    <i class="fas fa-robot"></i> Gemini Health Bot
+                </button>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab active" onclick="showTab('scan')" data-translate="scanTab">Scan QR Code</div>
+            <div class="tab" onclick="showTab('generate')" data-translate="generateTab">Generate QR Code</div>
+            <div class="tab" onclick="showTab('add')" data-translate="addTab">Add Hospital</div>
+            <div class="tab" onclick="showTab('emergency')" data-translate="emergencyTab">Emergency Contacts</div>
+            <div class="tab" onclick="showTab('about')" data-translate="aboutTab">About Us</div>
+        </div>
+
+        <div class="sections-container">
+            <!-- Scan QR Code Section -->
+            <div id="scan-tab" class="section active">
+                <div class="section-header">
+                    <h2>Scan QR Code</h2>
+                </div>
+                <div class="section-content">
+                    <div class="location-controls">
+                        <div class="form-group">
+                            <label for="scanCity">Select City:</label>
+                            <select id="scanCity" class="city-select">
+                                <option value="">Select City</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Nagpur">Nagpur</option>
+                                <option value="Thane">Thane</option>
+                                <option value="Nashik">Nashik</option>
+                                <option value="Aurangabad">Aurangabad</option>
+                                <option value="Solapur">Solapur</option>
+                                <option value="Kolhapur">Kolhapur</option>
+                                <option value="Amravati">Amravati</option>
+                                <option value="Nanded">Nanded</option>
+                                <option value="Sangli">Sangli</option>
+                                <option value="Jalgaon">Jalgaon</option>
+                                <option value="Akola">Akola</option>
+                                <option value="Latur">Latur</option>
+                                <option value="Dhule">Dhule</option>
+                                <option value="Ahmednagar">Ahmednagar</option>
+                                <option value="Chandrapur">Chandrapur</option>
+                                <option value="Parbhani">Parbhani</option>
+                                <option value="Buldhana">Buldhana</option>
+                                <option value="Yavatmal">Yavatmal</option>
+                                <option value="Satara">Satara</option>
+                                <option value="Beed">Beed</option>
+                                <option value="Osmanabad">Osmanabad</option>
+                                <option value="Wardha">Wardha</option>
+                                <option value="Gondia">Gondia</option>
+                                <option value="Gadchiroli">Gadchiroli</option>
+                                <option value="Washim">Washim</option>
+                                <option value="Hingoli">Hingoli</option>
+                            </select>
+                        </div>
+                        <button onclick="getCurrentLocation()" class="location-btn">Get Current Location</button>
+                    </div>
+                    <div class="video-container">
+                        <video id="video" playsinline></video>
+                        <canvas id="canvas"></canvas>
+                    </div>
+                    <button onclick="startScan()" class="scan-button">Start Scanning</button>
+                    
+                    <!-- Add Matching Hospital Section -->
+                    <div class="matching-hospitals-section">
+                        <h3>Matching Hospitals</h3>
+                        <div id="hospitalList" class="hospital-list">
+                            <!-- Matching hospitals will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div id="scanResult"></div>
+                </div>
+            </div>
+
+            <!-- Generate QR Code Section -->
+            <div id="generate-tab" class="section">
+                <div class="section-header">
+                    <h2>Generate QR Code</h2>
+                </div>
+                <div class="section-content">
+                    <form id="qrForm">
+                        <div class="form-group">
+                            <label for="patientName">Patient Name:</label>
+                            <input type="text" id="patientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bloodGroup">Blood Group:</label>
+                            <select id="bloodGroup" required>
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="requiredMedicine">Required Medicines*</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Insulin"> Insulin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Adrenaline"> Adrenaline
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Morphine"> Morphine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Antibiotics"> Antibiotics
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Painkillers"> Painkillers
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Atropine"> Atropine
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Dopamine"> Dopamine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Nitroglycerin"> Nitroglycerin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Aspirin"> Aspirin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Anti-venom"> Anti-venom
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Antihistamines"> Antihistamines
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Antacids"> Antacids
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Anti-inflammatory"> Anti-inflammatory
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Epinephrine"> Epinephrine
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Lidocaine"> Lidocaine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Dexamethasone"> Dexamethasone
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Metformin"> Metformin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Warfarin"> Warfarin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Amiodarone"> Amiodarone
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Naloxone"> Naloxone
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Furosemide"> Furosemide
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Heparin"> Heparin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="requiredMedicine" value="Calcium Gluconate"> Calcium Gluconate
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="button" id="saveMedicinesBtn" class="save-btn">Save Selected Medicines</button>
+                        </div>
+                        <div id="savedMedicines" class="saved-medicines">
+                            <h4>Saved Medicines</h4>
+                            <div id="savedMedicinesList"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Number:</label>
+                            <input type="tel" id="contactNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="allergies">Allergies (if any):</label>
+                            <textarea id="allergies" placeholder="List any allergies, separated by commas"></textarea>
+                        </div>
+                        <button type="submit" class="generate-btn">Generate QR Code</button>
+                    </form>
+                    <div id="qrDisplay" class="qr-display"></div>
+                </div>
+            </div>
+
+            <!-- Add Hospital Section -->
+            <div id="add-tab" class="section">
+                <div class="section-header">
+                    <h2>Add Hospital</h2>
+                </div>
+                <div class="section-content">
+                    <button onclick="showHospitalList('add')" class="hospital-list-btn">View Hospital List</button>
+                    <div id="addHospitalList" class="hospital-list-container" style="display: none;">
+                        <h3>Registered Hospitals</h3>
+                        <div class="hospital-list-content"></div>
+                    </div>
+                    <form id="hospitalForm">
+                        <div class="form-group">
+                            <label for="hospitalName">Hospital Name*</label>
+                            <select id="hospitalName" required>
+                                <option value="">Select Hospital</option>
+                                <!-- Mumbai Hospitals -->
+                                <optgroup label="Mumbai">
+                                    <option value="KEM Hospital">KEM Hospital</option>
+                                    <option value="Sion Hospital">Sion Hospital</option>
+                                    <option value="JJ Hospital">JJ Hospital</option>
+                                    <option value="Lokmanya Tilak Hospital">Lokmanya Tilak Hospital</option>
+                                    <option value="Nanavati Hospital">Nanavati Hospital</option>
+                                    <option value="Kokilaben Hospital">Kokilaben Hospital</option>
+                                    <option value="Lilavati Hospital">Lilavati Hospital</option>
+                                    <option value="Breach Candy Hospital">Breach Candy Hospital</option>
+                                    <option value="Hinduja Hospital">Hinduja Hospital</option>
+                                    <option value="Bombay Hospital">Bombay Hospital</option>
+                                    <option value="Jaslok Hospital">Jaslok Hospital</option>
+                                    <option value="Saifee Hospital">Saifee Hospital</option>
+                                    <option value="Prince Aly Khan Hospital">Prince Aly Khan Hospital</option>
+                                    <option value="Bai Jerbai Wadia Hospital">Bai Jerbai Wadia Hospital</option>
+                                    <option value="Fortis Hospital">Fortis Hospital</option>
+                                </optgroup>
+                                <!-- Pune Hospitals -->
+                                <optgroup label="Pune">
+                                    <option value="Ruby Hall Clinic">Ruby Hall Clinic</option>
+                                    <option value="Sahyadri Hospital">Sahyadri Hospital</option>
+                                    <option value="Jehangir Hospital">Jehangir Hospital</option>
+                                    <option value="Columbia Asia Hospital">Columbia Asia Hospital</option>
+                                    <option value="Noble Hospital">Noble Hospital</option>
+                                    <option value="Sassoon General Hospital">Sassoon General Hospital</option>
+                                    <option value="KEM Hospital Pune">KEM Hospital Pune</option>
+                                    <option value="Deenanath Mangeshkar Hospital">Deenanath Mangeshkar Hospital</option>
+                                    <option value="Inlaks and Budhrani Hospital">Inlaks and Budhrani Hospital</option>
+                                    <option value="Aditya Birla Memorial Hospital">Aditya Birla Memorial Hospital</option>
+                                    <option value="Yashwantrao Chavan Memorial Hospital">Yashwantrao Chavan Memorial Hospital</option>
+                                    <option value="Apollo Hospital Pune">Apollo Hospital Pune</option>
+                                    <option value="Care Hospital Pune">Care Hospital Pune</option>
+                                    <option value="Seven Star Hospital">Seven Star Hospital</option>
+                                    <option value="City Hospital">City Hospital</option>
+                                </optgroup>
+                                <!-- Nagpur Hospitals -->
+                                <optgroup label="Nagpur">
+                                    <option value="AIIMS Nagpur">AIIMS Nagpur</option>
+                                    <option value="Government Medical College Nagpur">Government Medical College Nagpur</option>
+                                    <option value="Indira Gandhi Government Medical College">Indira Gandhi Government Medical College</option>
+                                    <option value="Daga Memorial Hospital">Daga Memorial Hospital</option>
+                                    <option value="Lata Mangeshkar Hospital">Lata Mangeshkar Hospital</option>
+                                    <option value="Orange City Hospital">Orange City Hospital</option>
+                                    <option value="Getwell Hospital">Getwell Hospital</option>
+                                    <option value="Care Hospital Nagpur">Care Hospital Nagpur</option>
+                                    <option value="Seven Star Hospital">Seven Star Hospital</option>
+                                    <option value="Wockhardt Hospital Nagpur">Wockhardt Hospital Nagpur</option>
+                                    <option value="Apollo Hospital Nagpur">Apollo Hospital Nagpur</option>
+                                    <option value="Fortis Hospital Nagpur">Fortis Hospital Nagpur</option>
+                                    <option value="Krishna Hospital">Krishna Hospital</option>
+                                    <option value="Meditrina Institute of Medical Sciences">Meditrina Institute of Medical Sciences</option>
+                                    <option value="Shalinitai Meghe Hospital">Shalinitai Meghe Hospital</option>
+                                </optgroup>
+                                <!-- Nashik Hospitals -->
+                                <optgroup label="Nashik">
+                                    <option value="Government Medical College Nashik">Government Medical College Nashik</option>
+                                    <option value="Wockhardt Hospital Nashik">Wockhardt Hospital Nashik</option>
+                                    <option value="Apollo Hospital Nashik">Apollo Hospital Nashik</option>
+                                    <option value="Care Hospital Nashik">Care Hospital Nashik</option>
+                                    <option value="City Hospital Nashik">City Hospital Nashik</option>
+                                    <option value="Sai Hospital">Sai Hospital</option>
+                                    <option value="Shree Hospital">Shree Hospital</option>
+                                    <option value="Nashik Hospital">Nashik Hospital</option>
+                                    <option value="Life Care Hospital">Life Care Hospital</option>
+                                    <option value="Surya Hospital">Surya Hospital</option>
+                                    <option value="Shree Sai Hospital">Shree Sai Hospital</option>
+                                    <option value="City Care Hospital">City Care Hospital</option>
+                                    <option value="Noble Hospital Nashik">Noble Hospital Nashik</option>
+                                    <option value="Sai Shree Hospital">Sai Shree Hospital</option>
+                                    <option value="City Life Hospital">City Life Hospital</option>
+                                </optgroup>
+                                <!-- Aurangabad Hospitals -->
+                                <optgroup label="Aurangabad">
+                                    <option value="Government Medical College Aurangabad">Government Medical College Aurangabad</option>
+                                    <option value="Wockhardt Hospital Aurangabad">Wockhardt Hospital Aurangabad</option>
+                                    <option value="Apollo Hospital Aurangabad">Apollo Hospital Aurangabad</option>
+                                    <option value="Care Hospital Aurangabad">Care Hospital Aurangabad</option>
+                                    <option value="City Hospital Aurangabad">City Hospital Aurangabad</option>
+                                    <option value="Sai Hospital Aurangabad">Sai Hospital Aurangabad</option>
+                                    <option value="Shree Hospital Aurangabad">Shree Hospital Aurangabad</option>
+                                    <option value="Aurangabad Hospital">Aurangabad Hospital</option>
+                                    <option value="Life Care Hospital Aurangabad">Life Care Hospital Aurangabad</option>
+                                    <option value="Surya Hospital Aurangabad">Surya Hospital Aurangabad</option>
+                                    <option value="Shree Sai Hospital Aurangabad">Shree Sai Hospital Aurangabad</option>
+                                    <option value="City Care Hospital Aurangabad">City Care Hospital Aurangabad</option>
+                                    <option value="Noble Hospital Aurangabad">Noble Hospital Aurangabad</option>
+                                    <option value="Sai Shree Hospital Aurangabad">Sai Shree Hospital Aurangabad</option>
+                                    <option value="City Life Hospital Aurangabad">City Life Hospital Aurangabad</option>
+                                </optgroup>
+                                <!-- Solapur Hospitals -->
+                                <optgroup label="Solapur">
+                                    <option value="Government Medical College Solapur">Government Medical College Solapur</option>
+                                    <option value="Wockhardt Hospital Solapur">Wockhardt Hospital Solapur</option>
+                                    <option value="Apollo Hospital Solapur">Apollo Hospital Solapur</option>
+                                    <option value="Care Hospital Solapur">Care Hospital Solapur</option>
+                                    <option value="City Hospital Solapur">City Hospital Solapur</option>
+                                    <option value="Sai Hospital Solapur">Sai Hospital Solapur</option>
+                                    <option value="Shree Hospital Solapur">Shree Hospital Solapur</option>
+                                    <option value="Solapur Hospital">Solapur Hospital</option>
+                                    <option value="Life Care Hospital Solapur">Life Care Hospital Solapur</option>
+                                    <option value="Surya Hospital Solapur">Surya Hospital Solapur</option>
+                                    <option value="Shree Sai Hospital Solapur">Shree Sai Hospital Solapur</option>
+                                    <option value="City Care Hospital Solapur">City Care Hospital Solapur</option>
+                                    <option value="Noble Hospital Solapur">Noble Hospital Solapur</option>
+                                    <option value="Sai Shree Hospital Solapur">Sai Shree Hospital Solapur</option>
+                                    <option value="City Life Hospital Solapur">City Life Hospital Solapur</option>
+                                </optgroup>
+                                <!-- Kolhapur Hospitals -->
+                                <optgroup label="Kolhapur">
+                                    <option value="Government Medical College Kolhapur">Government Medical College Kolhapur</option>
+                                    <option value="Wockhardt Hospital Kolhapur">Wockhardt Hospital Kolhapur</option>
+                                    <option value="Apollo Hospital Kolhapur">Apollo Hospital Kolhapur</option>
+                                    <option value="Care Hospital Kolhapur">Care Hospital Kolhapur</option>
+                                    <option value="City Hospital Kolhapur">City Hospital Kolhapur</option>
+                                    <option value="Sai Hospital Kolhapur">Sai Hospital Kolhapur</option>
+                                    <option value="Shree Hospital Kolhapur">Shree Hospital Kolhapur</option>
+                                    <option value="Kolhapur Hospital">Kolhapur Hospital</option>
+                                    <option value="Life Care Hospital Kolhapur">Life Care Hospital Kolhapur</option>
+                                    <option value="Surya Hospital Kolhapur">Surya Hospital Kolhapur</option>
+                                    <option value="Shree Sai Hospital Kolhapur">Shree Sai Hospital Kolhapur</option>
+                                    <option value="City Care Hospital Kolhapur">City Care Hospital Kolhapur</option>
+                                    <option value="Noble Hospital Kolhapur">Noble Hospital Kolhapur</option>
+                                    <option value="Sai Shree Hospital Kolhapur">Sai Shree Hospital Kolhapur</option>
+                                    <option value="City Life Hospital Kolhapur">City Life Hospital Kolhapur</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location*</label>
+                            <select id="location" required>
+                                <option value="">Select Location</option>
+                                <!-- Mumbai Locations -->
+                                <optgroup label="Mumbai">
+                                    <option value="Bandra">Bandra</option>
+                                    <option value="Andheri">Andheri</option>
+                                    <option value="Juhu">Juhu</option>
+                                    <option value="Malad">Malad</option>
+                                    <option value="Borivali">Borivali</option>
+                                    <option value="Dadar">Dadar</option>
+                                    <option value="Parel">Parel</option>
+                                    <option value="Byculla">Byculla</option>
+                                    <option value="Colaba">Colaba</option>
+                                    <option value="Thane">Thane</option>
+                                    <option value="Mulund">Mulund</option>
+                                    <option value="Bhandup">Bhandup</option>
+                                    <option value="Powai">Powai</option>
+                                    <option value="Ghatkopar">Ghatkopar</option>
+                                    <option value="Vikhroli">Vikhroli</option>
+                                </optgroup>
+                                <!-- Pune Locations -->
+                                <optgroup label="Pune">
+                                    <option value="Deccan">Deccan</option>
+                                    <option value="Kothrud">Kothrud</option>
+                                    <option value="Karve Nagar">Karve Nagar</option>
+                                    <option value="Hadapsar">Hadapsar</option>
+                                    <option value="Kharadi">Kharadi</option>
+                                    <option value="Viman Nagar">Viman Nagar</option>
+                                    <option value="Koregaon Park">Koregaon Park</option>
+                                    <option value="Camp">Camp</option>
+                                    <option value="Shivaji Nagar">Shivaji Nagar</option>
+                                    <option value="Bund Garden">Bund Garden</option>
+                                    <option value="Aundh">Aundh</option>
+                                    <option value="Baner">Baner</option>
+                                    <option value="Hinjewadi">Hinjewadi</option>
+                                    <option value="Wakad">Wakad</option>
+                                    <option value="Pimple Saudagar">Pimple Saudagar</option>
+                                </optgroup>
+                                <!-- Nagpur Locations -->
+                                <optgroup label="Nagpur">
+                                    <option value="Civil Lines">Civil Lines</option>
+                                    <option value="Sadar">Sadar</option>
+                                    <option value="Dharampeth">Dharampeth</option>
+                                    <option value="Ramdaspeth">Ramdaspeth</option>
+                                    <option value="Sitabuldi">Sitabuldi</option>
+                                    <option value="Gandhibagh">Gandhibagh</option>
+                                    <option value="Mahal">Mahal</option>
+                                    <option value="Itwari">Itwari</option>
+                                    <option value="Dhantoli">Dhantoli</option>
+                                    <option value="Wardhaman Nagar">Wardhaman Nagar</option>
+                                    <option value="Lakadganj">Lakadganj</option>
+                                    <option value="Gittikhadan">Gittikhadan</option>
+                                    <option value="Koradi">Koradi</option>
+                                    <option value="Manish Nagar">Manish Nagar</option>
+                                    <option value="Hingna">Hingna</option>
+                                </optgroup>
+                                <!-- Nashik Locations -->
+                                <optgroup label="Nashik">
+                                    <option value="College Road">College Road</option>
+                                    <option value="Gangapur Road">Gangapur Road</option>
+                                    <option value="Mahatma Nagar">Mahatma Nagar</option>
+                                    <option value="Canada Corner">Canada Corner</option>
+                                    <option value="Upnagar">Upnagar</option>
+                                    <option value="Mahatma Nagar">Mahatma Nagar</option>
+                                    <option value="Pathardi">Pathardi</option>
+                                    <option value="Satpur">Satpur</option>
+                                    <option value="Ambad">Ambad</option>
+                                    <option value="Mhasrul">Mhasrul</option>
+                                </optgroup>
+                                <!-- Aurangabad Locations -->
+                                <optgroup label="Aurangabad">
+                                    <option value="Station Road">Station Road</option>
+                                    <option value="Cidco">Cidco</option>
+                                    <option value="Jalna Road">Jalna Road</option>
+                                    <option value="Beed Bypass">Beed Bypass</option>
+                                    <option value="Railway Station">Railway Station</option>
+                                    <option value="Kranti Chowk">Kranti Chowk</option>
+                                    <option value="Town Center">Town Center</option>
+                                    <option value="New Mondha">New Mondha</option>
+                                    <option value="Gulmandi">Gulmandi</option>
+                                    <option value="Shahganj">Shahganj</option>
+                                </optgroup>
+                                <!-- Solapur Locations -->
+                                <optgroup label="Solapur">
+                                    <option value="Station Road">Station Road</option>
+                                    <option value="Pandharpur Road">Pandharpur Road</option>
+                                    <option value="Barshi Road">Barshi Road</option>
+                                    <option value="Akluj Road">Akluj Road</option>
+                                    <option value="Airport Road">Airport Road</option>
+                                    <option value="Tikondi Road">Tikondi Road</option>
+                                    <option value="Mangalwar Peth">Mangalwar Peth</option>
+                                    <option value="Budhwar Peth">Budhwar Peth</option>
+                                    <option value="Shivaji Chowk">Shivaji Chowk</option>
+                                    <option value="Siddheshwar Peth">Siddheshwar Peth</option>
+                                </optgroup>
+                                <!-- Kolhapur Locations -->
+                                <optgroup label="Kolhapur">
+                                    <option value="Station Road">Station Road</option>
+                                    <option value="Rajaram Road">Rajaram Road</option>
+                                    <option value="Shivaji Road">Shivaji Road</option>
+                                    <option value="Tararani Chowk">Tararani Chowk</option>
+                                    <option value="Laxmipuri">Laxmipuri</option>
+                                    <option value="Shahupuri">Shahupuri</option>
+                                    <option value="Rankala">Rankala</option>
+                                    <option value="Mahadwar Road">Mahadwar Road</option>
+                                    <option value="Station Area">Station Area</option>
+                                    <option value="Rajwada">Rajwada</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City*</label>
+                            <select id="city" required>
+                                <option value="">Select City</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Nagpur">Nagpur</option>
+                                <option value="Thane">Thane</option>
+                                <option value="Nashik">Nashik</option>
+                                <option value="Aurangabad">Aurangabad</option>
+                                <option value="Solapur">Solapur</option>
+                                <option value="Kolhapur">Kolhapur</option>
+                                <option value="Amravati">Amravati</option>
+                                <option value="Nanded">Nanded</option>
+                                <option value="Sangli">Sangli</option>
+                                <option value="Jalgaon">Jalgaon</option>
+                                <option value="Akola">Akola</option>
+                                <option value="Latur">Latur</option>
+                                <option value="Dhule">Dhule</option>
+                                <option value="Ahmednagar">Ahmednagar</option>
+                                <option value="Chandrapur">Chandrapur</option>
+                                <option value="Parbhani">Parbhani</option>
+                                <option value="Buldhana">Buldhana</option>
+                                <option value="Yavatmal">Yavatmal</option>
+                                <option value="Satara">Satara</option>
+                                <option value="Beed">Beed</option>
+                                <option value="Osmanabad">Osmanabad</option>
+                                <option value="Wardha">Wardha</option>
+                                <option value="Gondia">Gondia</option>
+                                <option value="Gadchiroli">Gadchiroli</option>
+                                <option value="Washim">Washim</option>
+                                <option value="Hingoli">Hingoli</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bloodGroups">Available Blood Groups*</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="A+"> A+
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="A-"> A-
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="B+"> B+
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="B-"> B-
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="O+"> O+
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="O-"> O-
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="AB+"> AB+
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="bloodGroups" value="AB-"> AB-
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="medicines">Available Medicines*</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Insulin"> Insulin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Adrenaline"> Adrenaline
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Morphine"> Morphine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Antibiotics"> Antibiotics
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Painkillers"> Painkillers
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Atropine"> Atropine
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Dopamine"> Dopamine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Nitroglycerin"> Nitroglycerin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Aspirin"> Aspirin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Anti-venom"> Anti-venom
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Antihistamines"> Antihistamines
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Antacids"> Antacids
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Anti-inflammatory"> Anti-inflammatory
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Epinephrine"> Epinephrine
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Lidocaine"> Lidocaine
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Dexamethasone"> Dexamethasone
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Metformin"> Metformin
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Warfarin"> Warfarin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Amiodarone"> Amiodarone
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Naloxone"> Naloxone
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Furosemide"> Furosemide
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Heparin"> Heparin
+                                    </label>
+                                </div>
+                                <div class="checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="medicines" value="Calcium Gluconate"> Calcium Gluconate
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ventilators">Number of Ventilators*</label>
+                            <input type="number" id="ventilators" min="0" required>
+                        </div>
+                        <div class="map-container">
+                            <button type="button" onclick="updateMapLocation()" class="directions-btn">View Location on Google Maps</button>
+                        </div>
+                        <button type="submit" class="generate-btn">Add Hospital</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts Section -->
+            <div id="emergency-tab" class="section">
+                <div class="section-header">
+                    <h2>Emergency Contacts</h2>
+                </div>
+                <div class="section-content">
+                    <div class="emergency-section">
+                        <div class="emergency-categories">
+                            <div class="emergency-category">
+                                <h3>Emergency Services</h3>
+                                <div class="emergency-grid">
+                                    <div class="emergency-item">
+                                        <h4>Police Emergency</h4>
+                                        <p><a href="tel:100">100</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Ambulance</h4>
+                                        <p><a href="tel:108">108</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Fire Brigade</h4>
+                                        <p><a href="tel:101">101</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Road Accident</h4>
+                                        <p><a href="tel:1073">1073</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Disaster Management</h4>
+                                        <p><a href="tel:1070">1070</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="emergency-category">
+                                <h3>Helplines</h3>
+                                <div class="emergency-grid">
+                                    <div class="emergency-item">
+                                        <h4>Women Helpline</h4>
+                                        <p><a href="tel:1091">1091</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Child Helpline</h4>
+                                        <p><a href="tel:1098">1098</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Railway Helpline</h4>
+                                        <p><a href="tel:139">139</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Anti-Poison</h4>
+                                        <p><a href="tel:1800-116-117">1800-116-117</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Mental Health</h4>
+                                        <p><a href="tel:1800-599-0019">1800-599-0019</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="emergency-category">
+                                <h3>Medical Emergencies</h3>
+                                <div class="emergency-grid">
+                                    <div class="emergency-item">
+                                        <h4>Blood Bank</h4>
+                                        <p><a href="tel:104">104</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Organ Donation</h4>
+                                        <p><a href="tel:1800-419-6666">1800-419-6666</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>COVID Helpline</h4>
+                                        <p><a href="tel:1075">1075</a></p>
+                                    </div>
+                                    <div class="emergency-item">
+                                        <h4>Eye Bank</h4>
+                                        <p><a href="tel:1919">1919</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="emergency-info">
+                                <h3>Important Information</h3>
+                                <p><strong>24/7 Emergency Support:</strong> All these numbers are available 24/7 for emergency assistance.</p>
+                                <p><strong>Language Support:</strong> Most helplines provide support in multiple languages including English, Hindi, and regional languages.</p>
+                                <p><strong>Location Tracking:</strong> When calling emergency services, try to provide your exact location for faster response.</p>
+                                <p><strong>Stay Calm:</strong> While calling emergency services, try to stay calm and provide clear information about the situation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add this after the emergency contacts section and before the about us section -->
+            <div class="section ai-chat-section">
+                <h2>Emergency AI Assistant</h2>
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            Hello! I'm your emergency AI assistant. How can I help you today? I can provide information about:
+                            <ul>
+                                <li>Emergency procedures</li>
+                                <li>First aid guidance</li>
+                                <li>Hospital locations</li>
+                                <li>Emergency contact numbers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="userInput" placeholder="Type your emergency-related question here..." class="chat-input">
+                        <button onclick="sendMessage()" class="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add this after the AI chatbot section and before the About Us section -->
+            <div class="section ai-health-section">
+                <h2>AI Health Assistant</h2>
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="healthChatMessages">
+                        <div class="message bot-message">
+                            Hello! I'm your AI Health Assistant powered by ChatGPT. I can help you with:
+                            <ul>
+                                <li>General health advice</li>
+                                <li>Medical information</li>
+                                <li>Health tips and recommendations</li>
+                                <li>Basic medical guidance</li>
+                                <li>Health-related questions</li>
+                            </ul>
+                            Please note: This is for informational purposes only. Always consult a healthcare professional for medical advice.
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="healthUserInput" placeholder="Ask your health-related question here..." class="chat-input">
+                        <button onclick="sendHealthMessage()" class="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Us Section -->
+            <div id="about-tab" class="section">
+                <div class="section-header">
+                    <h2>About Us</h2>
+                </div>
+                <div class="section-content">
+                    <div class="about-section">
+                        <div class="about-content">
+                            <div class="about-card">
+                                <h3>Our Story</h3>
+                                <p>The idea for this project emerged from a simple yet powerful realization—many lives are lost in emergencies due to delayed access to critical medical information. Inspired by the need for a fast, efficient, and technology-driven solution, we developed a QR-based medical information system. Our goal was to create a seamless connection between accident victims, emergency responders, and nearby hospitals, ensuring timely assistance.</p>
+                                <p>We envisioned a system where a QR code placed on vehicles could instantly provide essential health details, such as blood group, allergies, medical history, and emergency contacts, allowing faster and better-informed medical care. Over time, we expanded the project to include a hospital interface, showing the availability of blood and medical resources in nearby hospitals, enabling effective coordination in critical situations.</p>
+                            </div>
+                            
+                            <div class="mission-vision">
+                                <div class="about-card">
+                                    <h3>Our Mission</h3>
+                                    <p>To provide a quick, reliable, and accessible medical information system using QR codes to help emergency responders, hospitals, and bystanders make informed decisions and deliver timely medical assistance to accident victims.</p>
+                                </div>
+                                
+                                <div class="about-card">
+                                    <h3>Our Vision</h3>
+                                    <p>To create a smart and efficient emergency response system that ensures every individual's critical health information is readily available in times of crisis, reducing fatalities and improving healthcare accessibility through seamless technology integration.</p>
+                                </div>
+                            </div>
+
+                            <div class="about-card">
+                                <h3>How It Works</h3>
+                                <p>QR Code Generation – Users register on the platform and generate a unique QR code that is placed on their vehicle.</p>
+                                <p>Scanning the QR Code – In case of an accident, emergency responders or bystanders scan the QR code using their smartphones.</p>
+                                <p>Instant Medical Information – The scanned QR code displays the driver's essential medical details, including blood group, allergies, medical history, and emergency contacts.</p>
+                                <p>Nearby Hospital Recommendations – The system shows a list of nearby hospitals that have the required medical resources, ensuring the victim gets immediate assistance.</p>
+                                <p>Hospital Coordination – Medical staff can access the patient's details and prepare necessary treatments in advance, saving valuable time and increasing the chances of survival.</p>
+                                <p>This project bridges the gap between victims and emergency medical assistance, ensuring faster decision-making, improved medical care, and a higher survival rate in critical situations.</p>
+                            </div>
+
+                            <div class="about-card">
+                                <h3>Contact Us</h3>
+                                <div class="contact-info">
+                                    <p>Email: support@hospitalemergency.com</p>
+                                    <p>Phone: +91 1234567890</p>
+                                    <p>Address: 123 Healthcare Street, Medical District, City, State, India</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hospitalListBottom">
+            <!-- Hospital list will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Include jsQR library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <!-- Include QR code generation library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <!-- Include translations file -->
+    <script src="translations.js"></script>
+    <!-- Include our JavaScript file -->
+    <script src="hospitalemergency.js"></script>
+    <script>
+        // Remove theme selector event listener
+    </script>
+    <script>
+        // Theme switching functionality
+        function changeTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Initialize theme from localStorage or system preference
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme) {
+                changeTheme(savedTheme);
+                document.getElementById('theme').value = savedTheme;
+            } else {
+                const defaultTheme = prefersDark ? 'dark' : 'light';
+                changeTheme(defaultTheme);
+                document.getElementById('theme').value = defaultTheme;
+            }
+        }
+
+        // Add theme initialization to window load
+        window.addEventListener('load', function() {
+            initializeTheme();
+        });
+    </script>
+    <script>
+    // Initialize Gemini AI (remove duplicate declarations)
+    const genAI = new GoogleGenerativeAI('AIzaSyDhNkCUsbIu-FRr_gLYfpuICgZZPZuEqys');
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    async function sendMessage() {
+        const userInput = document.getElementById('userInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const message = userInput.value.trim();
+        
+        if (message) {
+            // Add user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+            
+            // Clear input
+            userInput.value = '';
+            
+            // Show loading message
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot-message';
+            loadingDiv.textContent = 'Thinking...';
+            chatMessages.appendChild(loadingDiv);
+            
+            try {
+                // Get response from Gemini AI
+                const prompt = `You are a helpful AI health assistant. Provide accurate, helpful, and safe health-related information. Always include a disclaimer to consult healthcare professionals for medical advice. User question: ${message}`;
+                
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const text = response.text();
+                
+                // Remove loading message
+                chatMessages.removeChild(loadingDiv);
+                
+                // Add bot response
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot-message';
+                botMessageDiv.innerHTML = text;
+                chatMessages.appendChild(botMessageDiv);
+                
+            } catch (error) {
+                // Remove loading message
+                chatMessages.removeChild(loadingDiv);
+                
+                // Show error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'message bot-message error';
+                errorDiv.textContent = 'Sorry, I encountered an error. Please try again later.';
+                chatMessages.appendChild(errorDiv);
+                console.error('Error:', error);
+            }
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+
+    // Add event listener for Enter key
+    document.getElementById('userInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Update the toggleAIChat function
+    function toggleAIChat() {
+        const aiChatSection = document.getElementById('aiChatSection');
+        if (aiChatSection) {
+            aiChatSection.scrollIntoView({ behavior: 'smooth' });
+            // Add focus to the input field
+            const userInput = document.getElementById('userInput');
+            if (userInput) {
+                userInput.focus();
+            }
+        } else {
+            console.error('AI Chat section not found');
+        }
+    }
+
+    // Add this to ensure the chat is properly initialized
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatInput = document.getElementById('userInput');
+        if (chatInput) {
+            chatInput.focus();
+        }
+    });
+    </script>
+    <script>
+    function sendHealthMessage() {
+        const userInput = document.getElementById('healthUserInput');
+        const chatMessages = document.getElementById('healthChatMessages');
+        const message = userInput.value.trim();
+        
+        if (message) {
+            // Add user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+            
+            // Clear input
+            userInput.value = '';
+            
+            // Get AI response
+            setTimeout(() => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot-message';
+                const response = getHealthAIResponse(message);
+                botMessageDiv.innerHTML = response;
+                chatMessages.appendChild(botMessageDiv);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+    }
+
+    function getHealthAIResponse(message) {
+        message = message.toLowerCase();
+        
+        // Health-related responses
+        const healthResponses = {
+            'diet': 'A balanced diet should include:\n' +
+                    '<ul>' +
+                    '<li>Fruits and vegetables</li>' +
+                    '<li>Whole grains</li>' +
+                    '<li>Lean proteins</li>' +
+                    '<li>Healthy fats</li>' +
+                    '</ul>' +
+                    '<div class="health-tip">Tip: Try to eat a rainbow of colors in your fruits and vegetables!</div>',
+            
+            'exercise': 'Regular exercise benefits include:\n' +
+                       '<ul>' +
+                       '<li>Improved cardiovascular health</li>' +
+                       '<li>Better mental well-being</li>' +
+                       '<li>Stronger muscles and bones</li>' +
+                       '<li>Better sleep quality</li>' +
+                       '</ul>' +
+                       '<div class="health-tip">Tip: Aim for at least 30 minutes of moderate exercise daily!</div>',
+            
+            'sleep': 'Good sleep habits include:\n' +
+                     '<ul>' +
+                     '<li>7-9 hours of sleep per night</li>' +
+                     '<li>Regular sleep schedule</li>' +
+                     '<li>Dark, quiet sleeping environment</li>' +
+                     '<li>No screens before bedtime</li>' +
+                     '</ul>' +
+                     '<div class="health-tip">Tip: Create a relaxing bedtime routine!</div>',
+            
+            'stress': 'Stress management techniques:\n' +
+                      '<ul>' +
+                      '<li>Deep breathing exercises</li>' +
+                      '<li>Regular physical activity</li>' +
+                      '<li>Meditation or mindfulness</li>' +
+                      '<li>Time management</li>' +
+                      '</ul>' +
+                      '<div class="health-tip">Tip: Take regular breaks during work!</div>',
+            
+            'hypertension': 'To manage blood pressure:\n' +
+                           '<ul>' +
+                           '<li>Reduce salt intake</li>' +
+                           '<li>Regular exercise</li>' +
+                           '<li>Stress management</li>' +
+                           '<li>Regular check-ups</li>' +
+                           '</ul>' +
+                           '<div class="health-tip">Tip: Monitor your blood pressure regularly!</div>',
+            
+            'diabetes': 'Diabetes management includes:\n' +
+                       '<ul>' +
+                       '<li>Regular blood sugar monitoring</li>' +
+                       '<li>Balanced diet</li>' +
+                       '<li>Regular exercise</li>' +
+                       '<li>Medication adherence</li>' +
+                       '</ul>' +
+                       '<div class="health-tip">Tip: Keep a food diary to track your diet!</div>',
+            
+            'heart': 'Heart health tips:\n' +
+                     '<ul>' +
+                     '<li>Regular exercise</li>' +
+                     '<li>Healthy diet</li>' +
+                     '<li>No smoking</li>' +
+                     '<li>Regular check-ups</li>' +
+                     '</ul>' +
+                     '<div class="health-tip">Tip: Know your family history of heart disease!</div>',
+            
+            'mental': 'Mental health tips:\n' +
+                      '<ul>' +
+                      '<li>Regular exercise</li>' +
+                      '<li>Social connections</li>' +
+                      '<li>Stress management</li>' +
+                      '<li>Professional help when needed</li>' +
+                      '</ul>' +
+                      '<div class="health-tip">Tip: Practice self-care regularly!</div>',
+            
+            'default': 'I understand you have a health-related question. Could you please provide more details? I can help with:\n' +
+                      '<ul>' +
+                      '<li>General health advice</li>' +
+                      '<li>Lifestyle recommendations</li>' +
+                      '<li>Basic medical information</li>' +
+                      '<li>Health tips</li>' +
+                      '</ul>' +
+                      '<div class="disclaimer">Note: This is for informational purposes only. Always consult a healthcare professional for medical advice.</div>'
+        };
+        
+        // Check for keywords in the message
+        for (let key in healthResponses) {
+            if (message.includes(key)) {
+                return healthResponses[key];
+            }
+        }
+        
+        return healthResponses.default;
+    }
+
+    // Add event listener for Enter key
+    document.getElementById('healthUserInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendHealthMessage();
+        }
+    });
+    </script>
+    <script>
+    // Add event listener for the AI Chat button
+    document.addEventListener('DOMContentLoaded', function() {
+        const aiChatBtn = document.getElementById('aiChatBtn');
+        if (aiChatBtn) {
+            aiChatBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const aiChatSection = document.getElementById('aiChatSection');
+                if (aiChatSection) {
+                    aiChatSection.scrollIntoView({ behavior: 'smooth' });
+                    // Add focus to the input field
+                    const userInput = document.getElementById('userInput');
+                    if (userInput) {
+                        userInput.focus();
+                    }
+                } else {
+                    console.error('AI Chat section not found');
+                }
+            });
+        } else {
+            console.error('AI Chat button not found');
+        }
+    });
+    </script>
+    <script>
+    // Initialize Gemini AI (remove duplicate declarations)
+    const genAI = new GoogleGenerativeAI('AIzaSyDhNkCUsbIu-FRr_gLYfpuICgZZPZuEqys');
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    async function sendGeminiMessage() {
+        const userInput = document.getElementById('geminiUserInput');
+        const sendButton = document.querySelector('.send-button');
+        const responseArea = document.getElementById('geminiResponseArea');
+        const responseContent = document.getElementById('geminiResponseContent');
+        const message = userInput.value.trim();
+        
+        if (!message) return;
+        
+        // Disable input and button while processing
+        userInput.disabled = true;
+        sendButton.classList.add('loading');
+        sendButton.disabled = true;
+        
+        // Show response area with loading state
+        responseArea.style.display = 'block';
+        responseContent.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gemini AI is thinking...';
+        responseContent.className = 'response-content loading';
+        
+        try {
+            // Add search context to the prompt
+            const prompt = `As a health assistant, please provide accurate and helpful information about: ${message}. 
+                           Include relevant medical information, but always remind users to consult healthcare professionals for medical advice.`;
+            
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+            
+            // Display response in the response area
+            responseContent.className = 'response-content';
+            responseContent.innerHTML = text.replace(/\n/g, '<br>');
+            
+            // Add user message to chat history
+            const chatMessages = document.getElementById('geminiChatMessages');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.textContent = message;
+            chatMessages.appendChild(userMessageDiv);
+            
+            // Add bot response to chat history
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot-message';
+            botMessageDiv.innerHTML = text.replace(/\n/g, '<br>');
+            chatMessages.appendChild(botMessageDiv);
+            
+            // Clear input
+            userInput.value = '';
+            
+        } catch (error) {
+            console.error('Error:', error);
+            responseContent.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Sorry, I encountered an error. Please try again. If the problem persists, please check your internet connection.</span>
+                </div>
+            `;
+        } finally {
+            // Re-enable input and button
+            userInput.disabled = false;
+            sendButton.classList.remove('loading');
+            sendButton.disabled = false;
+            userInput.focus();
+        }
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Add error message styles
+    const errorStyles = `
+        .error-message {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #dc3545;
+            padding: 10px;
+            background-color: #f8d7da;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .error-message i {
+            font-size: 16px;
+        }
+
+        .error-message span {
+            font-size: 14px;
+        }
+    `;
+
+    // Add the styles to the document
+    const errorStyleSheet = document.createElement('style');
+    errorStyleSheet.textContent = errorStyles;
+    document.head.appendChild(errorStyleSheet);
+
+    // Add event listener for the Gemini Bot button
+    document.addEventListener('DOMContentLoaded', function() {
+        const geminiBotBtn = document.getElementById('geminiBotBtn');
+        if (geminiBotBtn) {
+            geminiBotBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openGeminiPrompt();
+            });
+        }
+    });
+
+    // Add event listener for Enter key
+    document.getElementById('geminiUserInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendGeminiMessage();
+        }
+    });
+    </script>
+
+    <!-- Add this to your existing script section -->
+    <script>
+    // Function to open Gemini prompt
+    function openGeminiPrompt() {
+        const geminiChatSection = document.getElementById('geminiChatSection');
+        if (geminiChatSection) {
+            // Show the chat section
+            geminiChatSection.style.display = 'block';
+            geminiChatSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Focus the input field
+            const userInput = document.getElementById('geminiUserInput');
+            if (userInput) {
+                userInput.focus();
+            }
+            
+            // Add welcome message if no messages exist
+            const chatMessages = document.getElementById('geminiChatMessages');
+            if (chatMessages && chatMessages.children.length === 0) {
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.className = 'message bot-message';
+                welcomeMessage.innerHTML = `
+                    Hello! I'm your Gemini Health Assistant. I can help you with:
+                    <ul>
+                        <li>General health advice</li>
+                        <li>Medical information</li>
+                        <li>Health tips and recommendations</li>
+                        <li>Basic medical guidance</li>
+                        <li>Health-related questions</li>
+                    </ul>
+                    Please note: This is for informational purposes only. Always consult a healthcare professional for medical advice.
+                `;
+                chatMessages.appendChild(welcomeMessage);
+            }
+        }
+    }
+    </script>
+
+    <!-- Add this after the emergency contacts section -->
+    <div class="section gemini-chat-section" id="geminiChatSection">
+        <div class="gemini-header">
+            <h2>Gemini Health Assistant</h2>
+            <div class="gemini-header-controls">
+                <button class="minimize-btn" onclick="toggleGeminiChat()">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="close-btn" onclick="closeGeminiChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-container">
+            <div class="chat-messages" id="geminiChatMessages">
+                <div class="message bot-message">
+                    Hello! I'm your Gemini Health Assistant. I can help you with:
+                    <ul>
+                        <li>General health advice</li>
+                        <li>Medical information</li>
+                        <li>Health tips and recommendations</li>
+                        <li>Basic medical guidance</li>
+                        <li>Health-related questions</li>
+                    </ul>
+                    Please note: This is for informational purposes only. Always consult a healthcare professional for medical advice.
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-input-header">
+                    <div class="header-left">
+                        <h3>Ask Gemini AI</h3>
+                        <span class="ai-status">Powered by Gemini 1.5 Flash</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="search-toggle" onclick="toggleSearchMode()">
+                            <i class="fas fa-search"></i>
+                            <span>Search Mode</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <div class="search-header">
+                            <div class="search-title">
+                                <h4>Google Search</h4>
+                                <small>Powered by Google Search API</small>
+                            </div>
+                        </div>
+                        <input type="text" id="geminiUserInput" placeholder="Search Google..." class="chat-input">
+                        <div class="input-actions">
+                            <button class="voice-input-btn" onclick="startVoiceInput()">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button class="clear-input-btn" onclick="clearInput()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="search-button-container">
+                        <div class="search-button-header">
+                            <i class="fab fa-google"></i>
+                            <span>Search with Google</span>
+                        </div>
+                        <button onclick="performGoogleSearch()" class="send-button google-search-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="search-options" id="searchOptions" style="display: none;">
+                    <div class="search-header">
+                        <div class="search-title">
+                            <h4>Search with Google</h4>
+                            <span class="search-subtitle">Powered by Google Search API</span>
+                        </div>
+                        <button class="close-search" onclick="toggleSearchMode()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="search-buttons">
+                        <button onclick="searchGoogle()" class="search-btn google">
+                            <i class="fab fa-google"></i>
+                            Search Google
+                        </button>
+                        <button onclick="searchScholar()" class="search-btn scholar">
+                            <i class="fas fa-graduation-cap"></i>
+                            Google Scholar
+                        </button>
+                        <button onclick="searchPubMed()" class="search-btn pubmed">
+                            <i class="fas fa-book-medical"></i>
+                            PubMed
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add these styles -->
+    <style>
+    .chat-input-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background-color: #e8f0fe;
+        color: #4285f4;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .search-toggle:hover {
+        background-color: #d2e3fc;
+    }
+
+    .input-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0 10px;
+    }
+
+    .input-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .input-actions button {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .input-actions button:hover {
+        background-color: #f8f9fa;
+        color: #4285f4;
+    }
+
+    .search-options {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .search-header h4 {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .close-search {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 50%;
+    }
+
+    .search-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn.google {
+        background-color: #4285f4;
+        color: white;
+    }
+
+    .search-btn.scholar {
+        background-color: #34a853;
+        color: white;
+    }
+
+    .search-btn.pubmed {
+        background-color: #ea4335;
+        color: white;
+    }
+
+    .search-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .search-button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-left: 15px;
+    }
+
+    .search-button-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #4285f4;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .search-button-header i {
+        font-size: 16px;
+    }
+
+    .google-search-btn {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .google-search-btn:hover {
+        background-color: #3367d6;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .google-search-btn i {
+        font-size: 16px;
+    }
+    </style>
+
+    <!-- Add these functions -->
+    <script>
+    let isSearchMode = false;
+
+    function toggleSearchMode() {
+        isSearchMode = !isSearchMode;
+        const searchOptions = document.getElementById('searchOptions');
+        const searchToggle = document.querySelector('.search-toggle');
+        
+        if (isSearchMode) {
+            searchOptions.style.display = 'block';
+            searchToggle.style.backgroundColor = '#4285f4';
+            searchToggle.style.color = 'white';
+        } else {
+            searchOptions.style.display = 'none';
+            searchToggle.style.backgroundColor = '#e8f0fe';
+            searchToggle.style.color = '#4285f4';
+        }
+    }
+
+    function startVoiceInput() {
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            recognition.onresult = function(event) {
+                const userInput = document.getElementById('geminiUserInput');
+                userInput.value = event.results[0][0].transcript;
+            };
+            
+            recognition.start();
+        } else {
+            alert('Voice input is not supported in your browser.');
+        }
+    }
+
+    function clearInput() {
+        const userInput = document.getElementById('geminiUserInput');
+        userInput.value = '';
+        userInput.focus();
+    }
+
+    function searchGoogle() {
+        const query = document.getElementById('geminiUserInput').value.trim();
+        if (!query) return;
+
+        const chatMessages = document.getElementById('geminiChatMessages');
+        
+        // Add user message
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.textContent = `Searching Google for: ${query}`;
+        chatMessages.appendChild(userMessageDiv);
+
+        // Add loading message
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message bot-message loading';
+        loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching search results...';
+        chatMessages.appendChild(loadingDiv);
+
+        // Open Google search in a new tab
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+
+        // Add a message about the search
+        setTimeout(() => {
+            loadingDiv.innerHTML = 'Search results opened in a new tab. You can copy and paste relevant information here.';
+        }, 1000);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function searchScholar() {
+        const query = document.getElementById('geminiUserInput').value.trim();
+        if (!query) return;
+
+        const chatMessages = document.getElementById('geminiChatMessages');
+        
+        // Add user message
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.textContent = `Searching Google Scholar for: ${query}`;
+        chatMessages.appendChild(userMessageDiv);
+
+        // Add loading message
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message bot-message loading';
+        loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching academic papers...';
+        chatMessages.appendChild(loadingDiv);
+
+        // Open Google Scholar in a new tab
+        window.open(`https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`, '_blank');
+
+        // Add a message about the search
+        setTimeout(() => {
+            loadingDiv.innerHTML = 'Academic papers opened in a new tab. You can copy and paste relevant information here.';
+        }, 1000);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function searchPubMed() {
+        const query = document.getElementById('geminiUserInput').value.trim();
+        if (!query) return;
+
+        const chatMessages = document.getElementById('geminiChatMessages');
+        
+        // Add user message
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.textContent = `Searching PubMed for: ${query}`;
+        chatMessages.appendChild(userMessageDiv);
+
+        // Add loading message
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message bot-message loading';
+        loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching medical research...';
+        chatMessages.appendChild(loadingDiv);
+
+        // Open PubMed in a new tab
+        window.open(`https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(query)}`, '_blank');
+
+        // Add a message about the search
+        setTimeout(() => {
+            loadingDiv.innerHTML = 'Medical research papers opened in a new tab. You can copy and paste relevant information here.';
+        }, 1000);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Update the sendGeminiMessage function to include search context
+    async function sendGeminiMessage() {
+        const userInput = document.getElementById('geminiUserInput');
+        const sendButton = document.querySelector('.send-button');
+        const message = userInput.value.trim();
+        
+        if (!message) return;
+        
+        // Disable input and button while processing
+        userInput.disabled = true;
+        sendButton.classList.add('loading');
+        sendButton.disabled = true;
+        
+        // Add user message to chat
+        const chatMessages = document.getElementById('geminiChatMessages');
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.textContent = message;
+        chatMessages.appendChild(userMessageDiv);
+        
+        // Clear input
+        userInput.value = '';
+        
+        // Add loading message
+        const loadingMessageDiv = document.createElement('div');
+        loadingMessageDiv.className = 'message bot-message loading';
+        loadingMessageDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gemini AI is thinking...';
+        chatMessages.appendChild(loadingMessageDiv);
+        
+        try {
+            // Add search context to the prompt
+            const prompt = `As a health assistant, please provide accurate and helpful information about: ${message}. 
+                           Include relevant medical information, but always remind users to consult healthcare professionals for medical advice.`;
+            
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+            
+            // Remove loading message
+            loadingMessageDiv.remove();
+            
+            // Add bot response
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot-message';
+            botMessageDiv.innerHTML = text.replace(/\n/g, '<br>');
+            chatMessages.appendChild(botMessageDiv);
+        } catch (error) {
+            console.error('Error:', error);
+            loadingMessageDiv.innerHTML = 'Sorry, I encountered an error. Please try again.';
+        } finally {
+            // Re-enable input and button
+            userInput.disabled = false;
+            sendButton.classList.remove('loading');
+            sendButton.disabled = false;
+            userInput.focus();
+        }
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    </script>
+
+    <!-- Add these styles -->
+    <style>
+    .input-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .input-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #4285f4;
+        font-weight: 500;
+    }
+
+    .input-title i {
+        font-size: 16px;
+    }
+
+    .google-search-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background-color: #e8f0fe;
+        color: #4285f4;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .google-search-btn:hover {
+        background-color: #d2e3fc;
+    }
+
+    .google-search-bar {
+        padding: 10px 15px;
+        background-color: #fff;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .search-bar-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 15px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .search-bar-container:focus-within {
+        background-color: #fff;
+        border-color: #4285f4;
+        box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+    }
+
+    .search-bar-container i.fa-google {
+        color: #4285f4;
+        font-size: 18px;
+    }
+
+    .google-input {
+        flex: 1;
+        border: none;
+        background: none;
+        font-size: 14px;
+        color: #333;
+        outline: none;
+    }
+
+    .search-button {
+        background: none;
+        border: none;
+        color: #4285f4;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .search-button:hover {
+        background-color: #e8f0fe;
+    }
+    </style>
+
+    <!-- Add these functions -->
+    <script>
+    function toggleGoogleSearch() {
+        const searchBar = document.getElementById('googleSearchBar');
+        const searchBtn = document.querySelector('.google-search-btn');
+        
+        if (searchBar.style.display === 'none') {
+            searchBar.style.display = 'block';
+            searchBtn.style.backgroundColor = '#4285f4';
+            searchBtn.style.color = 'white';
+        } else {
+            searchBar.style.display = 'none';
+            searchBtn.style.backgroundColor = '#e8f0fe';
+            searchBtn.style.color = '#4285f4';
+        }
+    }
+
+    function performGoogleSearch() {
+        const query = document.getElementById('googleSearchInput').value.trim();
+        if (query) {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            
+            // Add search query to chat
+            const chatMessages = document.getElementById('geminiChatMessages');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.innerHTML = `
+                <div class="search-message-header">
+                    <i class="fab fa-google"></i>
+                    <span>Google Search</span>
+                </div>
+                <div class="search-query">${query}</div>
+            `;
+            chatMessages.appendChild(userMessageDiv);
+            
+            // Clear search input
+            document.getElementById('googleSearchInput').value = '';
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+
+    // Add event listener for Enter key in Google search
+    document.getElementById('googleSearchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performGoogleSearch();
+        }
+    });
+    </script>
+
+    <!-- Add notification styles -->
+    <style>
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        border-radius: 4px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .notification.success {
+        background-color: #28a745;
+    }
+
+    .notification.error {
+        background-color: #dc3545;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    </style>
+
+    <!-- Add notification script -->
+    <script>
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+    </script>
+
+    <!-- Update the getCurrentLocation function -->
+    <script>
+    function getCurrentLocation() {
+        const locationBtn = document.getElementById('locationBtn');
+        const cityInput = document.getElementById('city');
+        
+        // Show loading state
+        locationBtn.classList.add('loading');
+        locationBtn.disabled = true;
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Get coordinates
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    
+                    // Use reverse geocoding to get location details
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const address = data.address;
+                            let locationDetails = '';
+                            
+                            // Build location string with available details
+                            if (address.city) locationDetails += address.city;
+                            else if (address.town) locationDetails += address.town;
+                            else if (address.village) locationDetails += address.village;
+                            
+                            if (address.state) {
+                                if (locationDetails) locationDetails += ', ';
+                                locationDetails += address.state;
+                            }
+                            
+                            if (address.country) {
+                                if (locationDetails) locationDetails += ', ';
+                                locationDetails += address.country;
+                            }
+                            
+                            if (locationDetails) {
+                                cityInput.value = locationDetails;
+                                showNotification('Location fetched successfully!', 'success');
+                                
+                                // Log coordinates and address for debugging
+                                console.log('Coordinates:', { latitude, longitude });
+                                console.log('Address:', address);
+                            } else {
+                                showNotification('Could not determine location details', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching location details:', error);
+                            showNotification('Error fetching location details', 'error');
+                        })
+                        .finally(() => {
+                            // Reset button state
+                            locationBtn.classList.remove('loading');
+                            locationBtn.disabled = false;
+                        });
+                },
+                function(error) {
+                    console.error('Error getting location:', error);
+                    let errorMessage = 'Error getting your location. ';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += 'Please allow location access in your browser settings.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += 'Location information is unavailable.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += 'Location request timed out.';
+                            break;
+                        default:
+                            errorMessage += 'Please check your browser permissions.';
+                    }
+                    
+                    showNotification(errorMessage, 'error');
+                    locationBtn.classList.remove('loading');
+                    locationBtn.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            showNotification('Geolocation is not supported by your browser', 'error');
+            locationBtn.classList.remove('loading');
+            locationBtn.disabled = false;
+        }
+    }
+    </script>
+</body>
+</html> 
